@@ -1,12 +1,12 @@
-const express = require('express');
+// const express = require('express');
 // const bodyParser = require("body-parser");
 
-require('./db/mongoose');
-const userRouter = require('./routers/userRouter');
-const taskRouter = require('./routers/taskRouter');
+// require('./db/mongoose');
+// const userRouter = require('./routers/userRouter');
+// const taskRouter = require('./routers/taskRouter');
 
-const app = express();
-const port = process.env.PORT;
+// const app = express();
+// const port = process.env.PORT;
 
 // app.use((req, res, next) => {
 //     if (req.method === 'GET') {
@@ -43,9 +43,9 @@ const port = process.env.PORT;
 //     res.status(404).send({ error: error.message });
 // });
 
-app.use(express.json());
-app.use(userRouter);
-app.use(taskRouter);
+// app.use(express.json());
+// app.use(userRouter);
+// app.use(taskRouter);
 
 // app.use((req, res, next) => {
 //     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -59,6 +59,9 @@ app.use(taskRouter);
 //     );
 //     next();
 //   });
+
+const app = require('./app');
+const port = process.env.PORT;
 
 app.listen(port, () => {
     console.log(`Server is up on port ${port}`);
