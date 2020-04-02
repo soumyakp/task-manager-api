@@ -118,7 +118,7 @@ router.patch('/tasks/:id', auth, async (req, res) => {
             owner: req.user._id
         });
         if (!task) {
-            return res.status(400).send({ error: 'Indalid param!'});
+            return res.status(400).send({ error: 'Invalid param!'});
         }
         taskUpdates.forEach((taskEachProperty) => task[taskEachProperty] = req.body[taskEachProperty]);
         task.save();

@@ -9,10 +9,13 @@ const { sendWelcomeEmail, sendCancelationEmail } = require('../emails/account');
 const router = new express.Router();
 
 router.post('/users', async (req, res) => {
-    const user = new User(req.body);
+    const { agree, ...userReq } = req.body;
+    const user = new User(userReq);
     try {
         await user.save();
-        sendWelcomeEmail(user.email, user.name);
+        if (req.body.agree) {
+            sendWelcomeEmail(user.email, user.name);
+        }
         const token = await user.getAuthenticated();
         res.status(201).send({ user, token });
     } catch (e) {
@@ -97,7 +100,7 @@ router.get('/users/me', auth, (req, res) => {
 
 router.patch('/users/me', auth, async (req, res) => {
     const updates = Object.keys(req.body);
-    const allowedUpdate = ['name', 'email', 'password', 'age'];
+    const allowedUpdate = ['name', 'email', 'password', 'age', 'birthday'];
     const isValidOperation = updates.every((eachPropertyName) => 
         allowedUpdate.includes(eachPropertyName)
     );
@@ -126,7 +129,9 @@ router.delete('/users/me', auth, async (req, res) => {
         //     return res.status(404).send({ error: 'Invalid params!' });
         // }
         await req.user.remove();
-        sendCancelationEmail(req.user.email, req.user.name);
+        if (req.user.agree) {
+            sendCancelationEmail(req.user.email, req.user.name);
+        }
         res.send(req.user);
     } catch (error) {
         res.status(500).send(error);
@@ -171,6 +176,21 @@ router.get('/users/:id/avatar', async (req, res) => {
         const user = await User.findById(req.params.id);
 
         if (!user || !user.avatar) {
+            throw new Error();
+        }
+
+        res.set('Content-Type', 'image/png');
+        res.send(user.avatar);
+    } catch (error) {
+        res.status(404).send();
+    }
+});
+
+router.get('/users/me/avatar', auth, async (req, res) => {
+    try {
+        const user = req.user;
+
+        if (!user.avatar) {
             throw new Error();
         }
 

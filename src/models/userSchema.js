@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const randtoken = require('rand-token');
+
 const Task = require('./taskSchema');
 
 const userSchema = new mongoose.Schema({
@@ -35,6 +37,10 @@ const userSchema = new mongoose.Schema({
                 throw new Error('Password can\'t contains password!');
             }
         }
+    },
+    birthday: {
+        type: Date,
+        required: true,
     },
     age: {
         type: Number,
@@ -83,7 +89,7 @@ userSchema.methods.toJSON = function () {
 userSchema.methods.getAuthenticated = async function () {
     const user = this;
     const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET);
-
+    // const refreshToken = randtoken.uid(256);
     user.tokens = user.tokens.concat({ token });
     await user.save();
     

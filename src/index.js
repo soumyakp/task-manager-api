@@ -47,18 +47,22 @@
 // app.use(userRouter);
 // app.use(taskRouter);
 
-// app.use((req, res, next) => {
-//     res.setHeader("Access-Control-Allow-Origin", "*");
-//     res.setHeader(
-//       "Access-Control-Allow-Headers",
-//       "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-//     );
-//     res.setHeader(
-//       "Access-Control-Allow-Methods",
-//       "GET, POST, PATCH, PUT, DELETE, OPTIONS"
-//     );
-//     next();
-//   });
+// const someArr = [
+//     {
+//         action: 'claim',
+//         brandId: 12
+//     },
+//     {
+//         action: 'approve',
+//         brandId: 15
+//     }
+// ];
+// const config = {};
+// for (const brands of someArr) {
+//     config.action = brands.action;
+//     config.brandId = brands.brandId;
+// }
+// console.log('config', config);
 
 const app = require('./app');
 const port = process.env.PORT;
